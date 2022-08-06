@@ -79,5 +79,4 @@ export function createElementFromHTML(htmlString, ty) {
     div.innerHTML = htmlString.trim();
     return assertClass(div.firstChild, ty, "createElementFromHTML:");
 }
-alert("𝚌𝚕𝚒𝚎𝚗𝚝-𝚖𝚒𝚜𝚌.𝚝𝚜 is done! v1.0.2");
 //# sourceMappingURL=client-misc.js.map

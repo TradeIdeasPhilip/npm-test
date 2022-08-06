@@ -152,5 +152,3 @@ export function createElementFromHTML<T extends object>(
   // Change div.firstChild to div.childNodes to support multiple top-level nodes.
   return assertClass(div.firstChild, ty, "createElementFromHTML:");
 }
-
-alert("𝚌𝚕𝚒𝚎𝚗𝚝-𝚖𝚒𝚜𝚌.𝚝𝚜 is done! v1.0.2")
