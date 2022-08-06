@@ -271,4 +271,5 @@ export function tclUnitTest(additionalTestCases = []) {
         console.log("SUCCESS", { successCount });
     }
 }
+alert("𝚝𝚌𝚕.𝚝𝚜 is done! v1.0.2");
 //# sourceMappingURL=tcl.js.map

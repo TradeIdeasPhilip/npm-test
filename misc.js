@@ -207,5 +207,5 @@ export function makeBoundedLinear(x1, y1, x2, y2) {
 export function polarToRectangular(r, θ) {
     return { x: Math.sin(θ) * r, y: Math.cos(θ) * r };
 }
-alert("𝚖𝚒𝚜𝚌.𝚝𝚜 is done!");
+alert("𝚖𝚒𝚜𝚌.𝚝𝚜 is done! v1.0.2");
 //# sourceMappingURL=misc.js.map

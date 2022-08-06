@@ -153,4 +153,4 @@ export function createElementFromHTML<T extends object>(
   return assertClass(div.firstChild, ty, "createElementFromHTML:");
 }
 
-alert("𝚌𝚕𝚒𝚎𝚗𝚝-𝚖𝚒𝚜𝚌.𝚝𝚜 is done!")
+alert("𝚌𝚕𝚒𝚎𝚗𝚝-𝚖𝚒𝚜𝚌.𝚝𝚜 is done! v1.0.2")

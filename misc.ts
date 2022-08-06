@@ -518,4 +518,4 @@ export function polarToRectangular(r: number, θ: number) {
   return { x: Math.sin(θ) * r, y: Math.cos(θ) * r };
 }
 
-alert("𝚖𝚒𝚜𝚌.𝚝𝚜 is done!")
+alert("𝚖𝚒𝚜𝚌.𝚝𝚜 is done! v1.0.2")
