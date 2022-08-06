@@ -1,0 +1,1 @@
+Trying to convert https://github.com/TradeIdeasPhilip/lib into a standard `npm` library. 
