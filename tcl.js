@@ -16,27 +16,6 @@ function encodeTclListElement(toEncode) {
         return tclQuote(tclList(toEncode));
     }
 }
-/**
- * This encodes a list of strings in the TCL format.
- *
- * TCL lists and programs are inspired by shell script.
- * A space separates two adjacent items.
- * If a list item contains a space (or other special character) we quote the item.
- * Any valid unicode string is a valid list item, including the output of previous calls to `tclList()`.
- * In fact the format is optimized for recursive lists.
- *
- * `tclList(a, b, c)` in JavaScript is the same as
- * `[list $a $b $c]` in TCL.
- *
- * If the items are strings, they are encoded in the normal TCL way.
- * If an item is a boolean, it is first converted to "1" or "0".
- * If an item is a number, it is converted to a string in the default way.
- * If an item is an array, `tclList()` recursively calls itself.
- *
- * For the unquoting rules, see http://tmml.sourceforge.net/doc/tcl/Tcl.html
- * @param list The items to encode in a single string.
- * @returns The list in TCL format.
- */
 export function tclList(list) {
     let result = "";
     for (const item of list) {
@@ -51,15 +30,7 @@ function isUnprintableAscii(char) {
     const charCode = char.charCodeAt(0);
     return charCode < 32 || charCode == 127;
 }
-// This is more than a curiosity.  I'm telling my tools (in the various config files)
-// that I know these features work.  Maybe I should start my program by checking.  And
-// print a nice error message if there's a problem, and refusing to continue.
 if (Array.from("😀")[0] != "😀") {
-    // Apparently older versions of JavaScript didn't do this the same way.
-    // "😀" is one unicode "code point" (roughly a character), but two
-    // "code units" (roughly, it would take 32 bits to store this
-    // internally) and older versions of JavaScript split this string into
-    // two pieces, neither of which is a valid unicode string.
     console.error({
         entireArray: Array.from("😀"),
         first: Array.from("😀")[0],
@@ -73,11 +44,6 @@ for (const codePoint of "😀") {
         throw new Error("Incompatible version of JavaScript.");
     }
 }
-/**
- * This is the same as saying `[list $s]` in TCL.
- * @param s The list item to be quoted
- * @returns A quoted version of s.
- */
 function tclQuote(s) {
     if (s == "") {
         return "{}";
@@ -90,12 +56,8 @@ function tclQuote(s) {
     for (let i = 0; i < inputLength; i++) {
         const character = asArray[i];
         if (character.length > 1) {
-            // A unicode character that required multiple code points.
-            // E.g. 😀
-            // These are all safe and require no special quoting.
         }
         else if (isUnprintableAscii(character)) {
-            // Quote all unprintable characters.
             requireSlashQuote = true;
         }
         else {
@@ -107,11 +69,9 @@ function tclQuote(s) {
                 }
                 case "\\": {
                     if (i + 1 == inputLength) {
-                        // Ends with a \.
                         requireSlashQuote = true;
                     }
                     else {
-                        // The character after the \ can be safely ignored.
                         requireBraceQuote = true;
                         i++;
                     }
@@ -139,31 +99,12 @@ function tclQuote(s) {
         }
     }
     if (braceCount) {
-        // The braces did not match.
         requireSlashQuote = true;
     }
     if (requireSlashQuote) {
-        // This is the most comprehensive quoting solution.  It can quote
-        // anything.  But the input can grow to 4 times the original size.
-        // If applied recursively, the size could double each time.
         let result = "";
         for (const character of s) {
             switch (character) {
-                // Some of this effort is not required.  \a does not need
-                // to be quoted at all.  \t could be quoted just like a brace
-                // or an unprintable character.  We go out of our way here to
-                // make things more readable to a human.  Also, sometimes it is
-                // convenient to the programmer to get rid or \n and \r,
-                // so the main input loop can use something simple like a gets().
-                //
-                // Interesting:  "\a" means beep in C++ and TCL.
-                // But "\a" in JavaScript just translates to "a".
-                /*
-                case "\\a": {
-                  result += "\\a";
-                  break;
-                }
-                */
                 case "\b": {
                     result += "\\b";
                     break;
@@ -199,12 +140,7 @@ function tclQuote(s) {
                 }
                 default: {
                     if (isUnprintableAscii(character)) {
-                        // By the time we get here we know that we could include the
-                        // character as is and TCL would not complain.  But this
-                        // is convenient to the human reader.
-                        const quoted = 
-                        // E.g. \x01 for character #1.
-                        `\\x` + character.codePointAt(0)?.toString(16).padStart(2, "0");
+                        const quoted = `\\x` + character.codePointAt(0)?.toString(16).padStart(2, "0");
                         result += quoted;
                     }
                     else {
@@ -213,7 +149,7 @@ function tclQuote(s) {
                 }
             }
         }
-        return result; // Slash quoted
+        return result;
     }
     else if (requireBraceQuote) {
         return "{" + s + "}";
@@ -231,7 +167,6 @@ export function tclUnitTest(additionalTestCases = []) {
             expectedResult: "\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\b\\t\\n\\v\\f\\r\\x0e\\x0f\\x10\\x11\\x12\\x13\\x14\\x15\\x16\\x17\\x18\\x19\\x1a\\x1b\\x1c\\x1d\\x1e\\x1f\\ !\\\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_`abcdefghijklmnopqrstuvwxyz\\{|\\}~\\x7f",
         },
         { source: "", expectedResult: "{}", notes: "empty string" },
-        //{ source: "something to fail", result: "no", notes: "something to fail" },
         {
             source: "simple_value",
             expectedResult: "simple_value",
