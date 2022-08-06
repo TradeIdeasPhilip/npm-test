@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/TradeIdeasPhilip/npm-test/issues"
   },
-  "homepage": "https://github.com/TradeIdeasPhilip/npm-test#readme"
+  "homepage": "https://github.com/TradeIdeasPhilip/npm-test#readme",
+  "devDependencies": {
+    "typedoc": "^0.23.10"
+  }
 }
